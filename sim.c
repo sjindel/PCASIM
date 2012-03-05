@@ -84,32 +84,3 @@ simulation* run (sim_desc* x, int seed)
     return s;
 
 }
-
-// Requires that the height and width of x and y be equal, returns NULL otherwise.
-/*int* diff(peca1d* x, peca1d* y)
-  {
-  if (x->height != y->height)
-  return NULL;
-
-  if (x->width != y->width)
-  return NULL;
-
-  int h = x->height;
-  int w = x->width;
-
-  int* difference = calloc(h,sizeof(int));
-
-  if (difference == NULL)
-  {
-  printf("Could not allocate memory.\n");
-  abort();
-  }
-
-  for (int l = 0; l < h; l ++)
-  for (int i = 0; i < w; i++)
-  if (x->trace[l*w + i] != y->trace[l*w + i])
-  difference[l]++;
-
-  return difference;
-  }
-*/

@@ -3,7 +3,7 @@
 #include <time.h>
 #include <malloc.h>
 #include "dSFMT.h"
-#include "sim.h"
+#include "diff.h"
 
 typedef struct sim_node
 {

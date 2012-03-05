@@ -30,5 +30,3 @@ typedef struct simulation
 } simulation;
 
 simulation* run (sim_desc* x, int seed);
-
-//int* diff(simulation* x, simulation* y);
