@@ -1,4 +1,4 @@
-#include "internals.h"
+#include "pcasim.h"
 
 int main(int argc, char** argv)
 {
