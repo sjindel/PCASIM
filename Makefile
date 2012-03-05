@@ -19,4 +19,4 @@ test: xalloc.c sim.c diff.c utils.c internals.c test.c
 	gcc ${CCFLAGS} ${DEBUGFLAGS} dsfmt/dSFMT.c xalloc.c sim.c utils.c internals.c test.c -o test
 
 clean:
-	rm test pcasim
+	rm -f test pcasim
