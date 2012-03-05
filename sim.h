@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
-#include <malloc.h>
+#include "xalloc.h"
 #include "dSFMT.h"
 
 typedef struct sim_desc

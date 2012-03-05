@@ -9,23 +9,11 @@ simulation* run (sim_desc* x, int seed)
 
     // Initialize simulation.
 
-    simulation* s = malloc(sizeof(struct simulation));
-
-    if (s == NULL)
-    {
-	printf("Could not allocate memory for simulation.\n");
-	abort();
-    }
+    simulation* s = xmalloc(sizeof(struct simulation));
 
     memcpy(&(s->desc),x,sizeof(sim_desc));
 
-    s->desc.initial = malloc(w*sizeof(char));
-
-    if (s->desc.initial == NULL)
-    {
-	printf("Could not allocate memory.\n");
-	abort();
-    }
+    s->desc.initial = xmalloc(w*sizeof(char));
 
     memcpy(s->desc.initial,x->initial,w*sizeof(char));
 
@@ -33,13 +21,7 @@ simulation* run (sim_desc* x, int seed)
 
     // Initialize trace
 
-    char* trace = calloc(x->width*x->height, sizeof(char));
-
-    if (trace == NULL)
-    {
-	printf("Could not allocate memory for simulation.\n");
-	abort();
-    }
+    char* trace = xcalloc(x->width*x->height, sizeof(char));
 
     s->trace = trace;
 

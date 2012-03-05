@@ -29,13 +29,7 @@ void add (simulation* s, sim_table* t)
 {
     int hash = desc_hash(&(s->desc));
 
-    sim_node* new_node = malloc(sizeof(struct sim_node));
-
-    if (new_node == NULL)
-    {
-	printf("Could not allocate memory.\n");
-	abort();
-    }
+    sim_node* new_node = xmalloc(sizeof(struct sim_node));
 
     new_node->s = s;
     new_node->next = t->array[hash % t->h];
@@ -65,5 +59,25 @@ simulation* find (sim_desc* d, sim_table* t)
 
 void balance(sim_table* t)
 {
-    return;
+    int load = t->n/t->h;
+
+    if (load > 1)
+    {
+	// Time to expand and rehash the table.
+
+	sim_node** new_table = xcalloc(2*t->h,sizeof(sim_node*));
+
+	// Iterate through the current hash table, adding the elements
+	// in it to the new table.
+
+	for (int i = 0; i < t->h; i++)
+	{
+	    sim_node* c = t->array[t->h];
+
+	    while(c != NULL)
+	    {
+		continue;
+	    }
+	}
+    }
 }

@@ -9,14 +9,14 @@ DEBUGFLAGS = -g -O0
 
 all: pcasim test
 
-pcasim: sim.c diff.c utils.c internals.c pcasim.c
-	gcc ${CCFLAGS} dsfmt/dSFMT.c sim.c utils.c internals.c pcasim.c -o pcasim
+pcasim: xalloc.c sim.c diff.c utils.c internals.c pcasim.c
+	gcc ${CCFLAGS} dsfmt/dSFMT.c xalloc.c sim.c utils.c internals.c pcasim.c -o pcasim
 
-debug: sim.c diff.c utils.c internals.c pcasim.c
-	gcc ${CCFLAGS} ${DEBUGFLAGS} dsfmt/dSFMT.c sim.c utils.c internals.c pcasim.c -o pcasim
+debug: xalloc.c sim.c diff.c utils.c internals.c pcasim.c
+	gcc ${CCFLAGS} ${DEBUGFLAGS} dsfmt/dSFMT.c xalloc.c sim.c utils.c internals.c pcasim.c -o pcasim
 
-test: sim.c diff.c utils.c internals.c test.c
-	gcc ${CCFLAGS} ${DEBUGFLAGS} dsfmt/dSFMT.c sim.c utils.c internals.c test.c -o test
+test: xalloc.c sim.c diff.c utils.c internals.c test.c
+	gcc ${CCFLAGS} ${DEBUGFLAGS} dsfmt/dSFMT.c xalloc.c sim.c utils.c internals.c test.c -o test
 
 clean:
 	rm test pcasim

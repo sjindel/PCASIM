@@ -18,13 +18,7 @@ int* diff_hamming(simulation* x, simulation* y)
     int h = x->desc.height;
     int w = x->desc.width;
 
-    int* diff = calloc(h,sizeof(int));
-
-    if (diff == NULL)
-    {
-	printf("Could not allocate memory for hamming difference.\n");
-	abort();
-    }
+    int* diff = xcalloc(h,sizeof(int));
 
     for (int l = 0; l < h; l++)
 	for (int i = 0; i < w; i++)
@@ -47,13 +41,7 @@ int* diff_tally(simulation* x, simulation* y)
     int h = x->desc.height;
     int w = x->desc.width;
 
-    int* diff = calloc(h,sizeof(int));
-
-    if (diff == NULL)
-    {
-	printf("Could not allocate memory for hamming difference.\n");
-	abort();
-    }
+    int* diff = xcalloc(h,sizeof(int));
 
     for (int l = 0; l < h; l++)
     {
