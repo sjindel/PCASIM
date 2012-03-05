@@ -11,4 +11,4 @@ all:
 	gcc ${CCFLAGS} dsfmt/dSFMT.c sim.c pcasim.c -o pcasim
 
 debug:
-	gcc ${CFLAGS} ${DEBUGFLAGS} dsfmt/dSFMT.c sim.c pcasim.c -o pcasim
+	gcc ${CCFLAGS} ${DEBUGFLAGS} dsfmt/dSFMT.c sim.c pcasim.c -o pcasim
