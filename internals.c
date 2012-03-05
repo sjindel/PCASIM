@@ -87,7 +87,7 @@ void balance(sim_table* t)
 	    }
 	}
 
-	// Free old table
+	// Free nodes inside old table.
 
 	for (int i = 0; i < t->h; i++)
 	{
@@ -96,14 +96,47 @@ void balance(sim_table* t)
 	    while(c != NULL)
 	    {
 		sim_node* tmp = c->next;
+		// Note that we don't free the simulation contained within, as
+		// it is reference in the new table.
 		free(c);
 		c = tmp;
 	    }
 	}
 
-	// Move new table into main structure
+	// Free old table itself.
+	free(t->array);
+
+	// Move new table into main structure.
 
 	t->array = new_array;
 	t->h = 2*t->h;
     }
+}
+
+// Entirely free a sim_table.
+void table_free(sim_table* t)
+{
+    // Free the nodes in the array first.
+
+    for (int i = 0; i < t->h; i++)
+    {
+	sim_node* c = t->array[i];
+
+	while (c != NULL)
+	{
+	    sim_node* tmp = c->next;
+
+	    // Now we will recursively free the simulation as well.
+
+	    simulation_free(c->s);
+
+	    free(c);
+	    c = tmp;
+	}
+    }
+
+    // Now free the array itself.
+    free(t->array);
+
+    free(t);
 }

@@ -74,3 +74,10 @@ simulation* run (sim_desc* x, int seed)
     return s;
 
 }
+
+void simulation_free(simulation* s)
+{
+    free(s->desc.initial);
+    free(s->trace);
+    free(s);
+}

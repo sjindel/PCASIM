@@ -30,3 +30,4 @@ typedef struct simulation
 } simulation;
 
 simulation* run (sim_desc* x, int seed);
+void simulation_free(simulation* s);
