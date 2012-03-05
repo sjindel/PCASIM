@@ -5,12 +5,13 @@
 #include "dSFMT.h"
 #include "diff.h"
 
-typedef struct sim_node
+struct sim_node
 {
     simulation* s;
     struct sim_node* next;
 
-} sim_node;
+};
+typedef struct sim_node sim_node;
 
 // sim_table is the hashtable that will store the simulations.
 typedef struct sim_table
@@ -18,9 +19,13 @@ typedef struct sim_table
     int n; // Number of simulations in the table.
     int h; // Size of the array.
 
-    sim_node* array;
+    sim_node** array;
 
 } sim_table;
 
 
-int hash (simulation* s);
+int desc_hash (sim_desc* s);
+void add (simulation* s, sim_table* t);
+simulation* find (sim_desc* d, sim_table* t);
+void balance(sim_table* t);
+int desc_cmp (sim_desc* x, sim_desc* y);
