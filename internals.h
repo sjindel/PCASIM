@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <malloc.h>
 #include "dSFMT.h"
 #include "sim.h"
 

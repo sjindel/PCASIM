@@ -34,7 +34,6 @@ simulation* run (sim_desc* x, int seed)
     s->trace = trace;
 
     // Copy initial conditions into first line of trace
-
     memcpy(trace,x->initial,w*sizeof(char));
 
     // Initialize MT.
@@ -50,6 +49,7 @@ simulation* run (sim_desc* x, int seed)
 	char tmp[w];
 
 	// Update new array.
+
 	for (int j = 0; j < w; j++)
 	{
 	    char new_state;
@@ -58,7 +58,7 @@ simulation* run (sim_desc* x, int seed)
 	    {
 		int q;
 		if (j - 1 < 0)
-		    q = j-1+w;
+		    q = j+w-1;
 		else
 		    q = j-1;
 
@@ -74,11 +74,11 @@ simulation* run (sim_desc* x, int seed)
 		new_state = trace[(i-1)*w + j];
 	    }
 
-	    tmp[i] = new_state;
+	    tmp[j] = new_state;
 	}
 
 	// Copy new array into appropriate line of old array.
-	memcpy(trace+i*w,&tmp,w*sizeof(char));
+	memcpy(trace+i*w,tmp,w*sizeof(char));
     }
 
     return s;

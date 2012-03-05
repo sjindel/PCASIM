@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
+#include <malloc.h>
 #include "dSFMT.h"
 
 typedef struct sim_desc
@@ -12,8 +13,9 @@ typedef struct sim_desc
 
     // Instance parameters.
     int width;
-    int pos;
     int height;
+
+    // Initial value parameter.
 
     char* initial;
 
