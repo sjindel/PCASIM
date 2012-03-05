@@ -29,6 +29,8 @@ int main(int argc, char** argv)
 
     run(&pca,&dsfmt);
 
+    print_pca1d(&pca);
+
     // Main loop.
 
     // Clean up.

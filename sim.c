@@ -4,7 +4,7 @@ void update(pca1d* x, dsfmt_t* dsfmt_p)
 {
 
     // Sanity check.
-    if (x->pos >= x->height)
+    if (x->pos > x->height)
     {
 	printf("Execution complete, nothing to do.\n");
 	return;
@@ -56,11 +56,8 @@ void update(pca1d* x, dsfmt_t* dsfmt_p)
 
 void run(pca1d* x, dsfmt_t* rng)
 {
-    for (int i = 0; i < x->height; i++)
-    {
-	printf("x\n");
+    while(x->pos < x->height)
 	update(x,rng);
-    }
 }
 
 // Requires that the height and width of x and y be equal, returns NULL otherwise.
