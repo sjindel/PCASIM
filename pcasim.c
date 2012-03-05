@@ -9,7 +9,7 @@ int main(int argc, char** argv)
 
     // Initialize the PCA.
 
-    pca1d pca;
+    peca1d pca;
     pca.width = 100;
     pca.height = 100;
     pca.p = 1;
@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 
     run(&pca,&dsfmt);
 
-    print_pca1d(&pca);
+    print_peca1d(&pca);
 
     // Main loop.
 

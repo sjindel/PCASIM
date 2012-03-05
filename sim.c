@@ -1,6 +1,6 @@
 #include "sim.h"
 
-void update(pca1d* x, dsfmt_t* dsfmt_p)
+void update(peca1d* x, dsfmt_t* dsfmt_p)
 {
 
     // Sanity check.
@@ -54,14 +54,14 @@ void update(pca1d* x, dsfmt_t* dsfmt_p)
 
 }
 
-void run(pca1d* x, dsfmt_t* rng)
+void run(peca1d* x, dsfmt_t* rng)
 {
     while(x->pos < x->height)
 	update(x,rng);
 }
 
 // Requires that the height and width of x and y be equal, returns NULL otherwise.
-int* diff(pca1d* x, pca1d* y)
+int* diff(peca1d* x, peca1d* y)
 {
     if (x->height != y->height)
 	return NULL;
@@ -88,7 +88,7 @@ int* diff(pca1d* x, pca1d* y)
     return difference;
 }
 
-void print_pca1d(pca1d* x)
+void print_peca1d(peca1d* x)
 {
     for (int i = 0; i < x->height; i++)
     {

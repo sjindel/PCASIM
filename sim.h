@@ -3,7 +3,7 @@
 #include <time.h>
 #include "dSFMT.h"
 
-typedef struct pca1d
+typedef struct peca1d
 {
     // Automata parameters.
     double p;
@@ -15,12 +15,12 @@ typedef struct pca1d
     int height;
     char* trace;
 
-} pca1d;
+} peca1d;
 
-void update(pca1d* x, dsfmt_t* dsfmt_p);
+void update(peca1d* x, dsfmt_t* dsfmt_p);
 
-int* diff(pca1d* x, pca1d* y);
+int* diff(peca1d* x, peca1d* y);
 
-void print_pca1d(pca1d* x);
+void print_peca1d(peca1d* x);
 
-void run(pca1d* x, dsfmt_t* rng);
+void run(peca1d* x, dsfmt_t* rng);
