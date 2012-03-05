@@ -19,6 +19,16 @@ simulation* run (sim_desc* x, int seed)
 
     memcpy(&(s->desc),x,sizeof(sim_desc));
 
+    s->desc.initial = malloc(w*sizeof(char));
+
+    if (s->desc.initial == NULL)
+    {
+	printf("Could not allocate memory.\n");
+	abort();
+    }
+
+    memcpy(s->desc.initial,x->initial,w*sizeof(char));
+
     s->mt_seed = seed;
 
     // Initialize trace

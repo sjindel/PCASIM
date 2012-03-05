@@ -24,8 +24,8 @@ typedef struct sim_table
 } sim_table;
 
 
+int desc_cmp (sim_desc* x, sim_desc* y);
 int desc_hash (sim_desc* s);
 void add (simulation* s, sim_table* t);
 simulation* find (sim_desc* d, sim_table* t);
 void balance(sim_table* t);
-int desc_cmp (sim_desc* x, sim_desc* y);
