@@ -1,21 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
-#include "dSFMT.h"
-
-typedef struct pca1d
-{
-    // Automata parameters.
-    double p;
-    char rule;
-
-    // Instance parameters.
-    int width;
-    int pos;
-    int height;
-    char* trace;
-
-} pca1d;
+#include "sim.h"
 
 void update(pca1d* x, dsfmt_t* dsfmt_p)
 {
@@ -71,6 +54,15 @@ void update(pca1d* x, dsfmt_t* dsfmt_p)
 
 }
 
+void run(pca1d* x, dsfmt_t* rng)
+{
+    for (int i = 0; i < x->height; i++)
+    {
+	printf("x\n");
+	update(x,rng);
+    }
+}
+
 // Requires that the height and width of x and y be equal, returns NULL otherwise.
 int* diff(pca1d* x, pca1d* y)
 {
@@ -107,32 +99,4 @@ void print_pca1d(pca1d* x)
 	    printf("%d,",x->trace[i*x->width + j]);
 	printf("\n");
     }
-}
-
-int main(int argc, char* argv[])
-{
-    // Initialize random number generator.
-    dsfmt_t dsfmt;
-    dsfmt_init_gen_rand(&dsfmt,time(0));
-
-    pca1d test;
-    sscanf(argv[1],"%lf",&test.p);
-    test.rule = 30;
-    test.width = 200;
-    test.height = 100;
-    test.trace = calloc(test.width*test.height,sizeof(char));
-    if (test.trace == NULL)
-    {
-	printf("Couldn't allocate memory.\n");
-	abort();
-    }
-    test.pos = 1;
-    test.trace[test.width/2]=1;
-
-    while (test.pos < test.height)
-	update(&test,&dsfmt);
-
-    print_pca1d(&test);
-
-    return 1;
 }
