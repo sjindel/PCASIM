@@ -7,4 +7,4 @@ MTFLAGS = -msse2 -DDSFMT_MEXP=2203 -DHAVE_SSE2
 CCFLAGS = $(OPTI) $(WARN) $(STD) $(INCL) $(MTFLAGS) #$(GTKFLAGS)
 
 all:
-	gcc ${CCFLAGS} dsfmt/dSFMT.c sim.c interpreter.c -o sim
+	gcc ${CCFLAGS} dsfmt/dSFMT.c sim.c pcasim.c -o pcasim
