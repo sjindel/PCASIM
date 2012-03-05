@@ -65,19 +65,45 @@ void balance(sim_table* t)
     {
 	// Time to expand and rehash the table.
 
-	sim_node** new_table = xcalloc(2*t->h,sizeof(sim_node*));
+	sim_node** new_array = xcalloc(2*t->h,sizeof(sim_node*));
 
 	// Iterate through the current hash table, adding the elements
 	// in it to the new table.
 
 	for (int i = 0; i < t->h; i++)
 	{
-	    sim_node* c = t->array[t->h];
+	    sim_node* c = t->array[i];
+	    while(c != NULL)
+	    {
+		// TODO: add simulation in c to the new table.
+
+		sim_node* new_node = xmalloc(sizeof(sim_node*));
+		new_node->s = c->s;
+
+		int hash = desc_hash(&(c->s->desc));
+
+		new_node->next = new_array[hash % ((t->h)*2)];
+		new_array[hash % ((t->h)*2)] = new_node;
+	    }
+	}
+
+	// Free old table
+
+	for (int i = 0; i < t->h; i++)
+	{
+	    sim_node* c = t->array[i];
 
 	    while(c != NULL)
 	    {
-		continue;
+		sim_node* tmp = c->next;
+		free(c);
+		c = tmp;
 	    }
 	}
+
+	// Move new table into main structure
+
+	t->array = new_array;
+	t->h = 2*t->h;
     }
 }
