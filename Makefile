@@ -7,7 +7,9 @@ MTFLAGS = -msse2 -DDSFMT_MEXP=2203 -DHAVE_SSE2
 CCFLAGS = $(OPTI) $(WARN) $(STD) $(INCL) $(MTFLAGS) #$(GTKFLAGS)
 DEBUGFLAGS = -g -O0
 
-all: dsfmt/dSFMT.c sim.c utils.c internals.c pcasim.c
+all: pcasim test
+
+pcasim: dsfmt/dSFMT.c sim.c utils.c internals.c pcasim.c
 	gcc ${CCFLAGS} dsfmt/dSFMT.c sim.c utils.c internals.c pcasim.c -o pcasim
 
 debug: dsfmt/dSFMT.c sim.c utils.c internals.c pcasim.c
