@@ -16,7 +16,6 @@ typedef struct sim_desc
     int height;
 
     // Initial value parameter.
-
     char* initial;
 
 } sim_desc;

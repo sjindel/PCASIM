@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <malloc.h>
+#include "xalloc.h"
 #include "utils.h"
 
 int main(int argc, char** argv)
 {
     // Initialize a sim_desc.
 
-    char* init = calloc(100,sizeof(char));
+    char* init = xcalloc(100,sizeof(char));
     init[99] = 1;
 
     sim_desc pca = {1, 110, 100, 100, init};
@@ -18,9 +18,7 @@ int main(int argc, char** argv)
 
     free(init);
 
-    free(result->trace);
-
-    free(result);
+    simulation_free(result);
 
     return 0;
 }

@@ -5,6 +5,8 @@
 #include "diff.h"
 #include "xalloc.h"
 
+// sim_node is the container for simulations that are put into the hashtable.
+
 struct sim_node
 {
     simulation* s;
@@ -14,6 +16,7 @@ struct sim_node
 typedef struct sim_node sim_node;
 
 // sim_table is the hashtable that will store the simulations.
+
 typedef struct sim_table
 {
     int n; // Number of simulations in the table.
@@ -22,6 +25,27 @@ typedef struct sim_table
     sim_node** array;
 
 } sim_table;
+
+// context stores the environment variables of the interpreter
+
+typedef struct context
+{
+
+    // Automata parameters.
+    double p;
+    char rule;
+
+    // Instance parameters.
+    int width;
+    int height;
+
+    // Initial value parameter.
+    char* initial;
+
+    // Seed parameter.
+    int seed;
+
+} context;
 
 
 int desc_cmp (sim_desc* x, sim_desc* y);
