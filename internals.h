@@ -2,12 +2,13 @@
 #include <stdio.h>
 #include <time.h>
 #include "dSFMT.h"
-#include "language.h"
+#include "sim.h"
 
 typedef struct sim_node
 {
     simulation* s;
     struct sim_node* next;
+
 } sim_node;
 
 // sim_table is the hashtable that will store the simulations.
@@ -19,3 +20,6 @@ typedef struct sim_table
     sim_node* array;
 
 } sim_table;
+
+
+int hash (simulation* s);

@@ -1,9 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <string.h>
 #include "dSFMT.h"
 
-typedef struct peca1d
+typedef struct sim_desc
 {
     // Automata parameters.
     double p;
@@ -13,14 +14,19 @@ typedef struct peca1d
     int width;
     int pos;
     int height;
+
+    char* initial;
+
+} sim_desc;
+
+typedef struct simulation
+{
+    sim_desc desc;
     char* trace;
+    int mt_seed;
 
-} peca1d;
+} simulation;
 
-void update(peca1d* x, dsfmt_t* dsfmt_p);
+simulation* run (sim_desc* x, int seed);
 
-int* diff(peca1d* x, peca1d* y);
-
-void print_peca1d(peca1d* x);
-
-void run(peca1d* x, dsfmt_t* rng);
+//int* diff(simulation* x, simulation* y);

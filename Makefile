@@ -8,7 +8,7 @@ CCFLAGS = $(OPTI) $(WARN) $(STD) $(INCL) $(MTFLAGS) #$(GTKFLAGS)
 DEBUGFLAGS = -g
 
 all:
-	gcc ${CCFLAGS} dsfmt/dSFMT.c sim.c pcasim.c -o pcasim
+	gcc ${CCFLAGS} dsfmt/dSFMT.c sim.c internals.c pcasim.c -o pcasim
 
 debug:
-	gcc ${CCFLAGS} ${DEBUGFLAGS} dsfmt/dSFMT.c sim.c pcasim.c -o pcasim
+	gcc ${CCFLAGS} ${DEBUGFLAGS} dsfmt/dSFMT.c sim.c internals.c pcasim.c -o pcasim
