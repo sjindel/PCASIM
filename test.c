@@ -5,33 +5,29 @@
 
 int main(int argc, char** argv)
 {
-    // Initialize a sim_desc.
-
-    char* init = xcalloc(100,sizeof(char));
-    init[99] = 1;
-
-    sim_desc pca = {1, 110, 100, 100, init};
-
-    // Run a simulation.
-
-    simulation* result = run(&pca, time(0));
-
-    // Initialize a sim_table.
-
     sim_table* t = new_table();
 
-    add(result,t);
+    char* init = xcalloc(100,sizeof(char));
 
-    simulation* x = find(&pca,t);
+    for (int i = 0; i < 100; i++)
+    {
+	printf("Adding simulation %d.\n",i);
+	for (int j = 0; j <= i; j++)
+	    init[j]=1;
 
-    if (x == result)
-	printf("Good.\n");
-    else
-	printf("Bad.\n");
+	sim_desc pca = {1, 110, 100, 100, init};
 
-    table_free(t);
+	// Run a simulation.
+
+	simulation* result = run(&pca, time(0));
+
+	add(result,t);
+
+    }
 
     free(init);
+
+    table_free(t);
 
     return 0;
 }

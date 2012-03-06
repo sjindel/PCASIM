@@ -84,6 +84,8 @@ void balance(sim_table* t)
 
 		new_node->next = new_array[hash % ((t->h)*2)];
 		new_array[hash % ((t->h)*2)] = new_node;
+
+		c = c->next;
 	    }
 	}
 
