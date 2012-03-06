@@ -28,7 +28,7 @@ typedef struct sim_table
 
 // context stores the environment variables of the interpreter
 
-typedef struct context
+typedef struct sim_context
 {
 
     // Automata parameters.
