@@ -54,3 +54,4 @@ void add (simulation* s, sim_table* t);
 simulation* find (sim_desc* d, sim_table* t);
 void balance(sim_table* t);
 void table_free(sim_table* t);
+sim_table* new_table();

@@ -140,3 +140,14 @@ void table_free(sim_table* t)
 
     free(t);
 }
+
+sim_table* new_table()
+{
+    sim_table* t = xmalloc(sizeof(struct sim_table));
+
+    t->n = 0;
+    t->h = 8;
+    t->array = xcalloc(t->h,sizeof(sim_node*));
+
+    return t;
+}

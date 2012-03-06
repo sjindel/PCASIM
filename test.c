@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "xalloc.h"
-#include "utils.h"
+#include "internals.h"
 
 int main(int argc, char** argv)
 {
@@ -12,13 +12,20 @@ int main(int argc, char** argv)
 
     sim_desc pca = {1, 110, 100, 100, init};
 
+    // Run a simulation.
+
     simulation* result = run(&pca, time(0));
+    printf("%p\n",result);
 
-    print_simulation(result);
+    // Initialize a sim_table.
 
-    free(init);
+    sim_table* t = new_table();
 
-    simulation_free(result);
+    add(result,t);
+
+    simulation* x = find(&pca,t);
+
+    printf("%p\n",x);
 
     return 0;
 }
