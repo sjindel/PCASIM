@@ -15,7 +15,6 @@ int main(int argc, char** argv)
     // Run a simulation.
 
     simulation* result = run(&pca, time(0));
-    printf("%p\n",result);
 
     // Initialize a sim_table.
 
@@ -25,7 +24,14 @@ int main(int argc, char** argv)
 
     simulation* x = find(&pca,t);
 
-    printf("%p\n",x);
+    if (x == result)
+	printf("Good.\n");
+    else
+	printf("Bad.\n");
+
+    table_free(t);
+
+    free(init);
 
     return 0;
 }

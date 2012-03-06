@@ -10,7 +10,7 @@ int desc_cmp (sim_desc* x, sim_desc* y)
 	return 0;
     if (x->height != y->height)
 	return 0;
-    if (memcmp(x->initial,y->initial,x->width))
+    if (!memcmp(x->initial,y->initial,x->width))
 	return 1;
     return 0;
 }
