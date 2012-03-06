@@ -7,13 +7,13 @@
 
 // sim_node is the container for simulations that are put into the hashtable.
 
+typedef struct sim_node sim_node;
 struct sim_node
 {
     simulation* s;
-    struct sim_node* next;
+    sim_node* next;
 
 };
-typedef struct sim_node sim_node;
 
 // sim_table is the hashtable that will store the simulations.
 
@@ -51,7 +51,7 @@ typedef struct context
 int desc_cmp (sim_desc* x, sim_desc* y);
 int desc_hash (sim_desc* s);
 void add (simulation* s, sim_table* t);
-simulation* find (sim_desc* d, sim_table* t);
+simulation* find (sim_desc* d, char s, int seed, sim_table* t);
 void balance(sim_table* t);
 void table_free(sim_table* t);
 sim_table* new_table();

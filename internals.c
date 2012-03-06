@@ -41,7 +41,7 @@ void add (simulation* s, sim_table* t)
     return;
 }
 
-simulation* find (sim_desc* d, sim_table* t)
+simulation* find (sim_desc* d, char s, int seed, sim_table* t)
 {
     int hash = desc_hash(d);
 
@@ -50,7 +50,19 @@ simulation* find (sim_desc* d, sim_table* t)
     while (c != NULL)
     {
 	if (desc_cmp(d,&(c->s->desc)))
-	    return c->s;
+	{
+	    if (s)
+	    {
+		if (seed == c->s->mt_seed)
+		{
+		    return c->s;
+		}
+	    }
+	    else
+	    {
+		    return c->s;
+	    }
+	}
 	c = c->next;
     }
 
