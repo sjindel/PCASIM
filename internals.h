@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <string.h>
 #include "dSFMT.h"
 #include "diff.h"
 #include "xalloc.h"
@@ -26,7 +27,7 @@ typedef struct sim_table
 
 } sim_table;
 
-// context stores the environment variables of the interpreter
+// sim_context stores the environment variables of the interpreter
 
 typedef struct sim_context
 {
@@ -45,7 +46,7 @@ typedef struct sim_context
     // Seed parameter.
     int seed;
 
-} context;
+} sim_context;
 
 
 int desc_cmp (sim_desc* x, sim_desc* y);

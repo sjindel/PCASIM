@@ -1,3 +1,3 @@
-#include "internals.h"
+#include "commands.h"
 
 int main(int argc, char** argv);
