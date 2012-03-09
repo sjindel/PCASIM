@@ -73,3 +73,21 @@ int sim_set (sim_context* context, sim_table* table, char* args)
     printf("Invalid arguments to `set'.");
     return 1;
 }
+
+int sim_run (sim_context* context, sim_table* table, char* args)
+{
+    sim_desc d;
+    d.p = context->p;
+    d.rule = context->rule;
+    d.width = context->width;
+
+    // TODO: Allow for other initial values.
+
+    char initial[d.width];
+    d.initial = initial;
+    d.initial[d.width/2] = 1;
+
+    table_add(run(&d,context->seed),table);
+
+    return 0;
+}

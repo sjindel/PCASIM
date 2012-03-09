@@ -18,11 +18,11 @@ int main(int argc, char** argv)
 
 	simulation* result = run(&pca, i);
 
-	add(result,t);
+	table_add(result,t);
 
     }
 
-    if (!find(&pca,1,50,t))
+    if (!table_find(&pca,1,50,t))
 	printf("Failure.\n");
 
     free(init);

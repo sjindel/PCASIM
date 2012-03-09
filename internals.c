@@ -25,7 +25,7 @@ int desc_hash (sim_desc* s)
 	s->width;
 }
 
-void add (simulation* s, sim_table* t)
+void table_add (simulation* s, sim_table* t)
 {
     int hash = desc_hash(&(s->desc));
 
@@ -36,12 +36,12 @@ void add (simulation* s, sim_table* t)
     t->array[hash % t->h] = new_node;
     t->n++;
 
-    balance(t);
+    table_balance(t);
 
     return;
 }
 
-simulation* find (sim_desc* d, char s, int seed, sim_table* t)
+simulation* table_find (sim_desc* d, char s, int seed, sim_table* t)
 {
     int hash = desc_hash(d);
 
@@ -69,7 +69,7 @@ simulation* find (sim_desc* d, char s, int seed, sim_table* t)
     return NULL;
 }
 
-void balance(sim_table* t)
+void table_balance(sim_table* t)
 {
     int load = t->n/t->h;
 

@@ -51,8 +51,8 @@ typedef struct sim_context
 
 int desc_cmp (sim_desc* x, sim_desc* y);
 int desc_hash (sim_desc* s);
-void add (simulation* s, sim_table* t);
-simulation* find (sim_desc* d, char s, int seed, sim_table* t);
-void balance(sim_table* t);
+void table_add (simulation* s, sim_table* t);
+simulation* table_find (sim_desc* d, char s, int seed, sim_table* t);
+void table_balance(sim_table* t);
 void table_free(sim_table* t);
 sim_table* new_table();
