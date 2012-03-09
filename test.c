@@ -23,11 +23,16 @@ int main(int argc, char** argv)
     }
 
     if (!table_find(&pca,1,50,t))
+    {
 	printf("Failure.\n");
+	abort();
+    }
 
     free(init);
 
     table_free(t);
+
+    printf("All tests passed successfullly.\n");
 
     return 0;
 }
