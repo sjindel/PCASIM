@@ -3,8 +3,9 @@ WARN = -Wall
 OPTI = -O3
 INCL = -I dsfmt/
 MTFLAGS = -msse2 -DDSFMT_MEXP=2203 -DHAVE_SSE2
+LIBFLAGS = -lreadline
 #GTKFLAGS = `pkg-config --cflags --libs gtk+-3.0` -DGTK_DISABLE_DEPRECATED=1
-CCFLAGS = $(OPTI) $(WARN) $(STD) $(INCL) $(MTFLAGS) #$(GTKFLAGS)
+CCFLAGS = $(OPTI) $(WARN) $(STD) $(INCL) $(MTFLAGS) $(LIBFLAGS) #$(GTKFLAGS)
 DEBUGFLAGS = -g -O0
 
 all: pcasim test
