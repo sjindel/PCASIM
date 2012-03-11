@@ -1,4 +1,7 @@
-#include "commands.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "sim.h"
+#include "internals.h"
 #include "readline/readline.h"
 #include "readline/history.h"
 

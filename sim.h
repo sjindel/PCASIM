@@ -1,3 +1,6 @@
+#ifndef _SIM_H
+#define _SIM_H
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
@@ -30,3 +33,5 @@ typedef struct simulation
 
 simulation* run (sim_desc* x, int seed);
 void simulation_free(simulation* s);
+
+#endif
