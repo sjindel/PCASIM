@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
-#include "dSFMT.h"
+#include "dsfmt/dSFMT.h"
 #include "diff.h"
 #include "xalloc.h"
 

@@ -6,7 +6,7 @@
 #include <time.h>
 #include <string.h>
 #include "xalloc.h"
-#include "dSFMT.h"
+#include "dsfmt/dSFMT.h"
 
 typedef struct sim_desc
 {
