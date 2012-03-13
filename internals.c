@@ -17,12 +17,9 @@ int desc_cmp (sim_desc* x, sim_desc* y)
 
 int desc_hash (sim_desc* s)
 {
-    return
-	s->p *
-	s->rule *
-	s->width *
-	s->height *
-	s->width;
+    int hash = s->rule + s->width + s->height + s->width;
+    hash += (int)(204823.0 * s->p);
+    return hash;
 }
 
 void table_add (simulation* s, sim_table* t)

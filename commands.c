@@ -16,7 +16,7 @@ int sim_set (sim_context* context, sim_table* table, char* args)
 		context->p = p;
 		return 0;
 	    }
-	    printf("Invalid value for parameter `p'.");
+	    printf("Invalid value for parameter `p'.\n");
 	    return 1;
 	}
 	if (strcmp(var,"rule") == 0)
@@ -29,10 +29,10 @@ int sim_set (sim_context* context, sim_table* table, char* args)
 		    context->rule = rule;
 		    return 0;
 		}
-		printf("Parameter `rule' must be in range [0,255].");
+		printf("Parameter `rule' must be in range [0,255].\n");
 		return 1;
 	    }
-	    printf("Invalid value for parameter `rule'.");
+	    printf("Invalid value for parameter `rule'.\n");
 	    return 1;
 	}
 	if (strcmp(var,"width") == 0)
@@ -43,7 +43,7 @@ int sim_set (sim_context* context, sim_table* table, char* args)
 		context->width = width;
 		return 0;
 	    }
-	    printf("Invalid value for parameter `width'.");
+	    printf("Invalid value for parameter `width'.\n");
 	    return 1;
 	}
 	if (strcmp(var,"height") == 0)
@@ -54,7 +54,7 @@ int sim_set (sim_context* context, sim_table* table, char* args)
 		context->height = height;
 		return 0;
 	    }
-	    printf("Invalid value for parameter `height'.");
+	    printf("Invalid value for parameter `height'.\n");
 	    return 1;
 	}
 	// TODO: Put in case for initial value parameter.
@@ -66,20 +66,22 @@ int sim_set (sim_context* context, sim_table* table, char* args)
 		context->seed = seed;
 		return 0;
 	    }
-	    printf("Invalid value for parameter `seed'.");
+	    printf("Invalid value for parameter `seed'.\n");
 	    return 1;
 	}
     }
-    printf("Invalid arguments to `set'.");
+    printf("Invalid arguments to `set'.\n");
     return 1;
 }
 
-int sim_run (sim_context* context, sim_table* table, char* args)
+int sim_run (sim_context* context, sim_table* table)
 {
+
     sim_desc d;
     d.p = context->p;
     d.rule = context->rule;
     d.width = context->width;
+    d.height = context->height;
 
     // TODO: Allow for other initial values.
 
@@ -87,7 +89,44 @@ int sim_run (sim_context* context, sim_table* table, char* args)
     d.initial = initial;
     d.initial[d.width/2] = 1;
 
-    table_add(run(&d,context->seed),table);
+
+    simulation* sim = run(&d,context->seed);
+
+
+    table_add(sim,table);
+
 
     return 0;
+}
+
+// Print out the current environment variables.
+
+int sim_show (sim_context* context)
+{
+    printf("p: %lf\nwidth: %d\nheight: %d\nseed: %d\n",
+	   context->p,context->width,context->height,context->seed);
+    return 0;
+}
+
+// Print out statistics of the table.
+
+int sim_stat (sim_table* table)
+{
+    // Print out the number of elements in each row.
+
+    for(int i = 0; i < table->h; i++)
+    {
+	int s = 0;
+	sim_node* c = table->array[i];
+	while (c != NULL)
+	{
+	    s++;
+	    c = c->next;
+	}
+	printf("Row %d has %d elements.\n",i,s);
+    }
+
+    printf("Table stats:\n");
+    printf("Elements: %d\n",table->n);
+    printf("Size: %d\n",table->h);
 }

@@ -6,6 +6,9 @@
 #include "diff.h"
 #include "xalloc.h"
 
+#ifndef __INTERNALS_H
+#define __INTERNALS_H
+
 // sim_node is the container for simulations that are put into the hashtable.
 
 typedef struct sim_node sim_node;
@@ -56,3 +59,5 @@ simulation* table_find (sim_desc* d, char s, int seed, sim_table* t);
 void table_balance(sim_table* t);
 void table_free(sim_table* t);
 sim_table* new_table();
+
+#endif

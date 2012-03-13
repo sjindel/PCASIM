@@ -19,56 +19,61 @@ simulation* run (sim_desc* x, int seed)
 
     s->mt_seed = seed;
 
+
     // Initialize trace
 
     char* trace = xcalloc(x->width*x->height, sizeof(char));
+
 
     s->trace = trace;
 
     // Copy initial conditions into first line of trace
     memcpy(trace,x->initial,w*sizeof(char));
 
+
     // Initialize MT.
 
     dsfmt_t dsfmt;
     dsfmt_init_gen_rand(&dsfmt,time(0));
 
+
     // Run the simulation
+
 
     for (int i = 1; i < h; i++)
     {
-	// Declare temporary array.
-	char tmp[w];
 
-	// Update new array.
+        // Declare temporary array.
+        char tmp[w];
 
-	for (int j = 0; j < w; j++)
-	{
-	    char new_state;
-	    double z = dsfmt_genrand_open_open(&dsfmt);
-	    if (z < (x->p))
-	    {
-		int q;
-		if (j - 1 < 0)
-		    q = j+w-1;
-		else
-		    q = j-1;
+        // Update new array.
 
-		char configuration =
-		    (trace[(i-1)*w + q]  << 2)
-		    + (trace[(i-1)*w*sizeof(char) + j]  << 1)
-		    + (trace[(i-1)*w*sizeof(char) + ((j+1) % w)]  << 0);
+        for (int j = 0; j < w; j++)
+        {
+            char new_state;
+            double z = dsfmt_genrand_open_open(&dsfmt);
+            if (z < (x->p))
+            {
+                int q;
+                if (j - 1 < 0)
+                    q = j+w-1;
+                else
+                    q = j-1;
 
-		new_state = (x->rule >> configuration) & 1;
-	    }
-	    else
-		new_state = trace[(i-1)*w + j];
+                char configuration =
+                    (trace[(i-1)*w + q]  << 2)
+                    + (trace[(i-1)*w*sizeof(char) + j]  << 1)
+                    + (trace[(i-1)*w*sizeof(char) + ((j+1) % w)]  << 0);
 
-	    tmp[j] = new_state;
-	}
+                new_state = (x->rule >> configuration) & 1;
+            }
+            else new_state = trace[(i-1)*w + j];
 
-	// Copy new array into appropriate line of old array.
-	memcpy(trace+i*w,tmp,w*sizeof(char));
+            tmp[j] = new_state;
+        }
+
+        // Copy new array into appropriate line of old array.
+        memcpy(trace+i*w,tmp,w*sizeof(char));
     }
 
     return s;
