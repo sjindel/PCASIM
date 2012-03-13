@@ -129,4 +129,6 @@ int sim_stat (sim_table* table)
     printf("Table stats:\n");
     printf("Elements: %d\n",table->n);
     printf("Size: %d\n",table->h);
+
+    return 0;
 }
