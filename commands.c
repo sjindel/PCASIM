@@ -159,7 +159,7 @@ int sim_write(sim_table* table)
 		return 1;
 	    }
 
-	    write_simulation(c->s,f);
+	    write_simulation_csv(c->s,f);
 
 	    fclose(f);
 

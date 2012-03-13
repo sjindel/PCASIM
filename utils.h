@@ -7,6 +7,8 @@
 
 void print_simulation (simulation* s);
 
-void write_simulation (simulation* s, FILE* f);
+void write_simulation_plain (simulation* s, FILE* f);
+
+void write_simulation_csv (simulation* s, FILE* f);
 
 #endif
