@@ -369,6 +369,8 @@ int interpret(char* line, sim_context* context, sim_table* table)
 	    return sim_set(context,table,args);
 	else if (strcmp(command,"run") == 0)
 	    return sim_run(context,table);
+	else if (strcmp(command,"write") == 0)
+	    return sim_write(table);
 	else if (strcmp(command,"show") == 0)
 	    return sim_show(context);
 	else if (strcmp(command,"stat") == 0)
@@ -404,7 +406,7 @@ int main(int argc, char** argv)
     context->width = 100;
     context->height = 100;
     context->initial = calloc(100,sizeof(char));
-    context->initial[0] = 1;
+    context->initial[99] = 1;
     context->seed = time(0);
 
     // Initialize hashtable.

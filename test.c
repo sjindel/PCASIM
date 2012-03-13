@@ -2,33 +2,42 @@
 #include <stdlib.h>
 #include "xalloc.h"
 #include "internals.h"
+#include "utils.h"
+#include "commands.h"
 
 int main(int argc, char** argv)
 {
     sim_table* t = new_table();
 
     char* init = xcalloc(100,sizeof(char));
-    sim_desc pca = {1, 110, 100, 100, init};
-    init[99] = 1;
+    init[50] = 1;
 
-    for (int i = 0; i < 100; i++)
-    {
+    sim_context* context = malloc(sizeof(struct sim_context));
 
-	// Run a simulation.
+    context->p = 1.0;
+    context->width = 100;
+    context->height = 100;
+    context->rule = 110;
+    context->initial = init;
+    context->seed = time(0);
 
-	simulation* result = run(&pca, i);
+    sim_desc pca = {1.0, 110, 100, 100, init};
 
-	table_add(result,t);
+    sim_run(context,t);
 
-    }
+    simulation* s = table_find(&pca,1,context->seed,t);
 
-    if (!table_find(&pca,1,50,t))
+    if (s == NULL)
     {
 	printf("Failure.\n");
 	abort();
     }
 
+    print_simulation(s);
+
     free(init);
+
+    free(context);
 
     table_free(t);
 

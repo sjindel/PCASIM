@@ -1,4 +1,7 @@
 #include "commands.h"
+#define FILE_NAME_BUF_SIZE 128
+
+// Set a context variable.
 
 int sim_set (sim_context* context, sim_table* table, char* args)
 {
@@ -74,6 +77,8 @@ int sim_set (sim_context* context, sim_table* table, char* args)
     return 1;
 }
 
+// Run a simulation of the current context.
+
 int sim_run (sim_context* context, sim_table* table)
 {
 
@@ -82,16 +87,9 @@ int sim_run (sim_context* context, sim_table* table)
     d.rule = context->rule;
     d.width = context->width;
     d.height = context->height;
-
-    // TODO: Allow for other initial values.
-
-    char initial[d.width];
-    d.initial = initial;
-    d.initial[d.width/2] = 1;
-
+    d.initial = context->initial;
 
     simulation* sim = run(&d,context->seed);
-
 
     table_add(sim,table);
 
@@ -129,6 +127,47 @@ int sim_stat (sim_table* table)
     printf("Table stats:\n");
     printf("Elements: %d\n",table->n);
     printf("Size: %d\n",table->h);
+
+    return 0;
+}
+
+// Write simulations in the hash table to disk
+// (in the current working directory).
+
+int sim_write(sim_table* table)
+{
+    for (int i = 0; i < table->h; i++)
+    {
+	sim_node* c = table->array[i];
+
+	while(c != NULL)
+	{
+	    // Write the simulation in this node to a file.
+
+	    sim_desc d = c->s->desc;
+
+	    char buffer[FILE_NAME_BUF_SIZE];
+
+	    sprintf(buffer,"%lf.%d.%d.%d.%d",
+		    d.p, d.rule, d.width, d.height, c->s->mt_seed);
+
+	    FILE* f = fopen(buffer,"w");
+
+	    if (f == NULL)
+	    {
+		printf("Error: could not open output file.\n");
+		return 1;
+	    }
+
+	    write_simulation(c->s,f);
+
+	    fclose(f);
+
+	    c = c->next;
+
+	}
+
+    }
 
     return 0;
 }
