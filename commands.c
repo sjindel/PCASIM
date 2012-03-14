@@ -1,5 +1,6 @@
 #include "commands.h"
 #define FILE_NAME_BUF_SIZE 128
+#define TOTAL_BUF_SIZE 256
 #define BYTES_PER_PIXEL 8
 
 // Set a context variable.
@@ -98,12 +99,16 @@ int sim_run (sim_context* context, sim_table* table)
     return 0;
 }
 
-int sim_disp(sim_context* context, sim_table* table)
+int sim_disp(sim_context* context, sim_table* table, char* args)
 {
     /*
       Write an image corresponding to the simulation trace
       in an appropriate output file and send it to eog.
     */
+
+    int scale = 1;
+
+    sscanf(args,"%d",&scale);
 
     sim_desc d = {context->p, context->rule, context->width, context->height,
 		  context->initial};
@@ -118,26 +123,53 @@ int sim_disp(sim_context* context, sim_table* table)
 
     char buffer[FILE_NAME_BUF_SIZE];
 
-    sprintf(buffer,"/tmp/%lf.%d.%d.%d.%d.trace.csv",
+    sprintf(buffer,"%lf.%d.%d.%d.%d.trace.pgm",
 	    d.p, d.rule, d.width, d.height, s->mt_seed);
 
-    FILE* f = fopen(buffer,"w");
+    int* image = xcalloc(d.width*scale*d.height*scale,sizeof(int));
 
-    if (!f)
+    for (int i = 0; i < d.height*scale; i++)
+	for (int j = 0; j < d.width*scale; j++)
+	    image[i*d.width*scale + j] =
+		s->trace[(i/scale)*d.width + (j/scale)] * 255;
+
+//		    printf("%d",image[(i*scale + k)*d.width + j*scale + l]/255);
+
+
+    pgm p = {d.width*scale,d.height*scale,255,image};
+
+    WritePGM(buffer,&p);
+
+    free(image);
+
+    // Open the file in eog.
+
+    char buf[TOTAL_BUF_SIZE];
+
+    sprintf(buf,"eog %s",buffer);
+
+    system(buf);
+
+    return 0;
+}
+
+int sim_print(sim_context* context, sim_table* table)
+{
+    sim_desc d = {context->p,context->rule,context->width,context->height,
+		  context->initial};
+
+    simulation* s = table_find(&d,1,context->seed,table);
+
+    if (s == NULL)
     {
-	printf("Could not open output file.\n");
+	printf("Context simulation has not been run.\n");
 	return 1;
     }
 
-    write_simulation_csv(s,f);
-
-    fclose(f);
-
-    int x = fork();
-    if (x == 0)
-	execl("display_trace",buffer);
+    print_simulation(s);
 
     return 0;
+
 }
 
 // Write simulations in the hash table to disk

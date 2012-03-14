@@ -39,11 +39,11 @@ simulation* run (sim_desc* x, int seed)
 
     // Run the simulation
 
-
     for (int i = 1; i < h; i++)
     {
 
         // Declare temporary array.
+
         char tmp[w];
 
         // Update new array.
@@ -67,7 +67,10 @@ simulation* run (sim_desc* x, int seed)
 
                 new_state = (x->rule >> configuration) & 1;
             }
-            else new_state = trace[(i-1)*w + j];
+            else
+	    {
+		new_state = trace[(i-1)*w + j];
+	    }
 
             tmp[j] = new_state;
         }

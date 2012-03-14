@@ -8,19 +8,16 @@ LIBFLAGS = -lreadline -lpng
 CCFLAGS = $(OPTI) $(WARN) $(STD) $(INCL) $(MTFLAGS) $(LIBFLAGS) #$(GTKFLAGS)
 DEBUGFLAGS = -g -O0
 
-all: pcasim test display_trace
+all: pcasim test
 
-pcasim: xalloc.c sim.c diff.c utils.c internals.c commands.c pcasim.c
-	gcc ${CCFLAGS} dsfmt/dSFMT.c xalloc.c sim.c utils.c internals.c commands.c pcasim.c -o pcasim
+pcasim: xalloc.c sim.c diff.c utils.c internals.c commands.c pgmlib.c pcasim.c pgmlib.c
+	gcc ${CCFLAGS} dsfmt/dSFMT.c xalloc.c sim.c utils.c internals.c commands.c pgmlib.c pcasim.c -o pcasim
 
-debug: xalloc.c sim.c diff.c utils.c internals.c commands.c pcasim.c
-	gcc ${CCFLAGS} ${DEBUGFLAGS} dsfmt/dSFMT.c xalloc.c sim.c utils.c internals.c commands.c pcasim.c -o pcasim
+debug: xalloc.c sim.c diff.c utils.c internals.c commands.c pgmlib.c pcasim.c pgmlib.c
+	gcc ${CCFLAGS} ${DEBUGFLAGS} dsfmt/dSFMT.c xalloc.c sim.c utils.c internals.c commands.c pgmlib.c pcasim.c -o pcasim
 
-test: xalloc.c sim.c diff.c utils.c internals.c commands.c test.c
-	gcc ${CCFLAGS} ${DEBUGFLAGS} dsfmt/dSFMT.c xalloc.c sim.c utils.c internals.c commands.c test.c -o test
-
-display_trace:
-	gcc ${CCFLAGS} display_trace.c -o display_trace
+test: xalloc.c sim.c diff.c utils.c internals.c commands.c test.c pgmlib.c
+	gcc ${CCFLAGS} ${DEBUGFLAGS} dsfmt/dSFMT.c xalloc.c sim.c utils.c internals.c commands.c pgmlib.c test.c -o test
 
 clean:
 	rm -f test pcasim display_trace

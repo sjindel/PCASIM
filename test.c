@@ -10,7 +10,7 @@ int main(int argc, char** argv)
     sim_table* t = new_table();
 
     char* init = xcalloc(100,sizeof(char));
-    init[50] = 1;
+    init[99] = 1;
 
     sim_context* context = malloc(sizeof(struct sim_context));
 
@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 
     print_simulation(s);
 
-    sim_disp(context,t);
+    sim_disp(context,t,"3");
 
     free(init);
 
