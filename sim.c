@@ -1,4 +1,5 @@
 #include "sim.h"
+#include "utils.h"
 
 simulation* run (sim_desc* x, int seed)
 {
@@ -34,7 +35,7 @@ simulation* run (sim_desc* x, int seed)
     // Initialize MT.
 
     dsfmt_t dsfmt;
-    dsfmt_init_gen_rand(&dsfmt,time(0));
+    dsfmt_init_gen_rand(&dsfmt,seed);
 
 
     // Run the simulation
@@ -78,6 +79,8 @@ simulation* run (sim_desc* x, int seed)
         // Copy new array into appropriate line of old array.
         memcpy(trace+i*w,tmp,w*sizeof(char));
     }
+
+    print_simulation(s);
 
     return s;
 
