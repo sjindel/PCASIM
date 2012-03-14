@@ -193,7 +193,7 @@ int sim_disp(sim_context* context, sim_table* table, char* args)
     for (int i = 0; i < d.height*scale; i++)
 	for (int j = 0; j < d.width*scale; j++)
 	    image[i*d.width*scale + j] =
-		s->trace[(i/scale)*d.width + (j/scale)] * 255;
+		(1 - s->trace[(i/scale)*d.width + (j/scale)]) * 255;
 
 //		    printf("%d",image[(i*scale + k)*d.width + j*scale + l]/255);
 
