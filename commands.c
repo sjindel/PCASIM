@@ -302,7 +302,7 @@ int sim_render(sim_table* table)
 	    for (int i = 0; i < d.height*scale; i++)
 		for (int j = 0; j < d.width*scale; j++)
 		    image[i*d.width*scale + j] =
-			c->s->trace[(i/scale)*d.width + (j/scale)] * 255;
+			(1 - c->s->trace[(i/scale)*d.width + (j/scale)]) * 255;
 
 	//		    printf("%d",image[(i*scale + k)*d.width + j*scale + l]/255);
 
