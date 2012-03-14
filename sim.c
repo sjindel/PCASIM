@@ -80,8 +80,6 @@ simulation* run (sim_desc* x, int seed)
         memcpy(trace+i*w,tmp,w*sizeof(char));
     }
 
-    print_simulation(s);
-
     return s;
 
 }
