@@ -375,11 +375,11 @@ int sim_diff_hamm(sim_context* context, sim_table* table, char* args)
 
     char buffer[FILE_NAME_BUF_SIZE];
     if (!fix_seed)
-	sprintf(buffer,"%lf.%d.%d.%d.v.%lf.%d.%d.%d.diff",
+	sprintf(buffer,"%lf.%d.%d.%d.v.%lf.%d.%d.%d.csv",
 		fix_desc.p, fix_desc.rule, fix_desc.width, fix_desc.height,
 		con_desc.p, con_desc.rule, con_desc.width, con_desc.height);
     else
-	sprintf(buffer,"%lf.%d.%d.%d.%d.v.%lf.%d.%d.%d.%d.diff",
+	sprintf(buffer,"%lf.%d.%d.%d.%d.v.%lf.%d.%d.%d.%d.csv",
 		fix_desc.p, fix_desc.rule, fix_desc.width, fix_desc.height,
 		fix_seed, con_desc.p, con_desc.rule, con_desc.width,
 		con_desc.height, context->seed);
