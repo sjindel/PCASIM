@@ -365,9 +365,9 @@ int sim_diff_hamm(sim_context* context, sim_table* table, char* args)
     assert(con);
     assert(fix);
 
-    if (fix_desc.width != con_desc.width)
+    if ((fix_desc.width != con_desc.width) || (fix_desc.height != con_desc.height))
     {
-	printf("Error: can not diff simulations of different width.\n");
+	printf("Error: can not diff simulations of different dimensions.\n");
 	return 1;
     }
 
@@ -392,7 +392,7 @@ int sim_diff_hamm(sim_context* context, sim_table* table, char* args)
 	return 1;
     }
 
-    for (int i = 0; i < fix_desc.width; i++)
+    for (int i = 0; i < fix_desc.height; i++)
 	fprintf(f,"%d\n",difference[i]);
 
     fclose(f);
