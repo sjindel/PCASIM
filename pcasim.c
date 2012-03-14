@@ -149,21 +149,18 @@ int interpret(char* line, sim_context* context, sim_table* table)
 		return 1;
 	    }
 
-	    printf("p before loop: %lf\n",context->p);
 
 	    // Everything is OK so far, time to begin loop.
 
 	    for(double p = p_start_value; p < p_end_value; p+=p_interval)
 	    {
 		context->p = p;
-		printf("%lf: %s\n",p,rest);
 		if(interpret(rest,context,table)) break;
 	    }
 
 	    // Restore old value of p
 	    context->p = old_p;
 
-	    printf("p after loop: %lf\n",context->p);
 
 	    // Done.
 	    return 0;
@@ -194,21 +191,18 @@ int interpret(char* line, sim_context* context, sim_table* table)
 		return 1;
 	    }
 
-	    printf("rule before loop: %d\n",context->rule);
 
 	    // Everything is OK so far, time to begin loop.
 
 	    for(char rule = rule_start_value; rule < rule_end_value; rule+=rule_interval)
 	    {
 		context->rule = rule;
-		printf("%d: %s\n",rule,rest);
 		if(interpret(rest,context,table)) break;
 	    }
 
 	    // Restore old value of rule
 	    context->rule = old_rule;
 
-	    printf("rule after loop: %d\n",context->rule);
 
 	    // Done.
 	    return 0;
@@ -238,21 +232,18 @@ int interpret(char* line, sim_context* context, sim_table* table)
 		return 1;
 	    }
 
-	    printf("width before loop: %d\n",context->width);
 
 	    // Everything is OK so far, time to begin loop.
 
 	    for(int width = width_start_value; width < width_end_value; width+=width_interval)
 	    {
 		context->width = width;
-		printf("%d: %s\n",width,rest);
 		if(interpret(rest,context,table)) break;
 	    }
 
 	    // Restore old value of width
 	    context->width = old_width;
 
-	    printf("width after loop: %d\n",context->width);
 
 	    // Done.
 	    return 0;
@@ -283,21 +274,18 @@ int interpret(char* line, sim_context* context, sim_table* table)
 		return 1;
 	    }
 
-	    printf("height before loop: %d\n",context->height);
 
 	    // Everything is OK so far, time to begin loop.
 
 	    for(int height = height_start_value; height < height_end_value; height+=height_interval)
 	    {
 		context->height = height;
-		printf("%d: %s\n",height,rest);
 		if(interpret(rest,context,table)) break;
 	    }
 
 	    // Restore old value of height
 	    context->height = old_height;
 
-	    printf("height after loop: %d\n",context->height);
 
 	    // Done.
 	    return 0;
@@ -328,21 +316,18 @@ int interpret(char* line, sim_context* context, sim_table* table)
 		return 1;
 	    }
 
-	    printf("seed before loop: %d\n",context->seed);
 
 	    // Everything is OK so far, time to begin loop.
 
 	    for(int seed = seed_start_value; seed < seed_end_value; seed+=seed_interval)
 	    {
 		context->seed = seed;
-		printf("%d: %s\n",seed,rest);
 		if(interpret(rest,context,table)) break;
 	    }
 
 	    // Restore old value of seed
 	    context->seed = old_seed;
 
-	    printf("seed after loop: %d\n",context->seed);
 
 	    // Done.
 	    return 0;
