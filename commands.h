@@ -4,12 +4,15 @@
 #include "internals.h"
 #include "utils.h"
 #include "pgmlib.h"
+#include "malloc.h"
+#include "assert.h"
+#include "diff.h"
 
 int sim_set (sim_context* context, sim_table* table, char* args);
 
 int sim_run (sim_context* context, sim_table* table);
 
-int sim_diff (sim_context* context, sim_table* table, char* args);
+int sim_diff_hamm (sim_context* context, sim_table* table, char* args);
 
 int sim_read (sim_context* context, sim_table* table);
 

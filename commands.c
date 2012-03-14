@@ -2,6 +2,7 @@
 #define FILE_NAME_BUF_SIZE 128
 #define TOTAL_BUF_SIZE 256
 #define BYTES_PER_PIXEL 8
+#define BASE_NUM 0x30
 
 // Set a context variable.
 
@@ -10,6 +11,7 @@ int sim_set (sim_context* context, sim_table* table, char* args)
     int l = strlen(args);
     char var[l];
     char val[l];
+    char seq[l];
 
     if (sscanf(args,"%s %s",var,val) == 2)
     {
@@ -46,6 +48,18 @@ int sim_set (sim_context* context, sim_table* table, char* args)
 	    if (sscanf(val,"%d",&width) == 1)
 	    {
 		context->width = width;
+		context->initial = realloc(context->initial,
+					   context->width*sizeof(char));
+
+		if (!context->initial)
+		{
+		    printf("Could not allocate memory.\n");
+		    return 1;
+		}
+
+		for (int i = 0; i < context->width; i++)
+		    context->initial[i] = 0;
+
 		return 0;
 	    }
 	    printf("Invalid value for parameter `width'.\n");
@@ -62,7 +76,6 @@ int sim_set (sim_context* context, sim_table* table, char* args)
 	    printf("Invalid value for parameter `height'.\n");
 	    return 1;
 	}
-	// TODO: Put in case for initial value parameter.
 	if (strcmp(var,"seed") == 0)
 	{
 	    int seed;
@@ -72,6 +85,55 @@ int sim_set (sim_context* context, sim_table* table, char* args)
 		return 0;
 	    }
 	    printf("Invalid value for parameter `seed'.\n");
+	    return 1;
+	}
+    }
+    if (sscanf(args,"%s %s %s",var,val,seq) == 3)
+    {
+	if (strcmp(var,"initial") == 0)
+	{
+	    int len = strlen(seq);
+
+	    // Wipe current initial buffer.
+
+	    for (int i = 0; i < context->width; i++)
+		context->initial[i] = 0;
+
+	    if (strcmp(val,"left") == 0)
+	    {
+		for (int i = 0; (i < len) && (i < context->width); i++)
+		    context->initial[i] = seq[i] - BASE_NUM;
+		return 0;
+	    }
+	    else if (strcmp(val,"right") == 0)
+	    {
+		int start_val = 0;
+
+		if ((context->width - len) > start_val)
+		    start_val = context->width - len;
+
+		for (int i = start_val; i < context->width; i++)
+		    context->initial[i] = seq[i-start_val] - BASE_NUM;
+		return 0;
+	    }
+	    else if (strcmp(val,"center") == 0)
+	    {
+		int start_val = 0;
+
+		if ((context->width - len) > start_val)
+		    start_val = (context->width - len)/2;
+
+		for (int i = start_val; i < (context->width+len)/2; i++)
+		    context->initial[i] = seq[i-start_val] - BASE_NUM;
+		return 0;
+	    }
+	    else if (strcmp(val,"periodic") == 0)
+	    {
+		for (int i = 0; i < context->width; i++)
+		    context->initial[i] = seq[i%len] - BASE_NUM;
+		return 0;
+	    }
+	    printf("Invalid values for parameters for `initial'.\n");
 	    return 1;
 	}
     }
@@ -213,12 +275,145 @@ int sim_write(sim_table* table)
     return 0;
 }
 
+// Render all the pictures.
+int sim_render(sim_table* table)
+{
+    for (int i = 0; i < table->h; i++)
+    {
+	sim_node* c = table->array[i];
+
+	while(c != NULL)
+	{
+	    // Write the simulation in this node to a file.
+
+	    sim_desc d = c->s->desc;
+
+	    int scale = 1;
+	    if (1000/d.width > scale)
+		scale = 1000/d.width;
+
+	    char buffer[FILE_NAME_BUF_SIZE];
+
+	    sprintf(buffer,"%lf.%d.%d.%d.%d.trace.pgm",
+		    d.p, d.rule, d.width, d.height, c->s->mt_seed);
+
+	    int* image = xcalloc(d.width*scale*d.height*scale,sizeof(int));
+
+	    for (int i = 0; i < d.height*scale; i++)
+		for (int j = 0; j < d.width*scale; j++)
+		    image[i*d.width*scale + j] =
+			c->s->trace[(i/scale)*d.width + (j/scale)] * 255;
+
+	//		    printf("%d",image[(i*scale + k)*d.width + j*scale + l]/255);
+
+
+	    pgm p = {d.width*scale,d.height*scale,255,image};
+
+	    WritePGM(buffer,&p);
+
+	    free(image);
+
+	    c = c->next;
+
+	}
+
+    }
+
+    return 0;
+}
+
+// Write a hamming difference of two simulations
+
+int sim_diff_hamm(sim_context* context, sim_table* table, char* args)
+{
+    double fix_p;
+    int fix_width, fix_height, fix_seed;
+    char fix_rule;
+
+    if (sscanf(args,"[ %lf , %d , %d , %d , %d ]",
+	       &fix_p,&fix_rule,&fix_width,&fix_height,&fix_seed)
+	!= 5)
+    {
+	printf("Invalid arguments to the hamming difference.\n");
+	return 1;
+    }
+
+    sim_desc fix_desc = {fix_p,fix_rule,fix_width,fix_height,context->initial};
+
+    simulation* fix;
+    if (fix_seed)
+	fix = table_find(&fix_desc,1,fix_seed,table);
+    else
+	fix = table_find(&fix_desc,0,0,table);
+
+    if (!fix)
+    {
+	printf("Reference simulation not run.\n");
+	return 1;
+    }
+
+    sim_desc con_desc = {context->p, context->rule, context->width,
+			 context->height, context->initial};
+
+    simulation* con;
+    if (fix_seed)
+	con = table_find(&con_desc,1,context->seed,table);
+    else
+	con = table_find(&con_desc,0,0,table);
+
+    if (!con)
+    {
+	sim_run(context, table);
+	con = table_find(&con_desc,0,0,table);
+    }
+
+    assert(con);
+    assert(fix);
+
+    if (fix_desc.width != con_desc.width)
+    {
+	printf("Error: can not diff simulations of different width.\n");
+	return 1;
+    }
+
+    int* difference = diff_hamming(con,fix);
+
+    char buffer[FILE_NAME_BUF_SIZE];
+    if (!fix_seed)
+	sprintf(buffer,"%lf.%d.%d.%d.v.%lf.%d.%d.%d.diff",
+		fix_desc.p, fix_desc.rule, fix_desc.width, fix_desc.height,
+		con_desc.p, con_desc.rule, con_desc.width, con_desc.height);
+    else
+	sprintf(buffer,"%lf.%d.%d.%d.%d.v.%lf.%d.%d.%d.%d.diff",
+		fix_desc.p, fix_desc.rule, fix_desc.width, fix_desc.height,
+		fix_seed, con_desc.p, con_desc.rule, con_desc.width,
+		con_desc.height, context->seed);
+
+    FILE* f = fopen(buffer,"w");
+
+    if (!f)
+    {
+	printf("Could not open output file for diff.\n");
+	return 1;
+    }
+
+    for (int i = 0; i < fix_desc.width; i++)
+	fprintf(f,"%d\n",difference[i]);
+
+    fclose(f);
+
+    return 0;
+}
+
 // Print out the current environment variables.
 
 int sim_show (sim_context* context)
 {
-    printf("p: %lf\nwidth: %d\nheight: %d\nseed: %d\n",
+    printf("p: %lf\nwidth: %d\nheight: %d\nseed: %d\ninitial:\n",
 	   context->p,context->width,context->height,context->seed);
+    for (int i = 0; i < context->width; i++)
+	printf("%d",context->initial[i]);
+    printf("\n");
     return 0;
 }
 

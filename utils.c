@@ -34,3 +34,18 @@ void write_simulation_csv (simulation* s, FILE* f)
 	fprintf(f,"\n");
     }
 }
+
+char* eat_whitespace_front(char* x)
+{
+    while ((*x == ' ') || (*x == '\t') || (*x == '\n')) x++;
+    return x;
+}
+
+void eat_whitespace_back(char* x)
+{
+    // Remove trailing whitespace.
+    char* end = x + strlen(x);
+    end--;
+    while ((*end == ' ') || (*end == '\t') || (*end == '\n')) end--;
+    *(end+1) = '\0';
+}

@@ -11,4 +11,8 @@ void write_simulation_plain (simulation* s, FILE* f);
 
 void write_simulation_csv (simulation* s, FILE* f);
 
+char* eat_whitespace_front(char* x);
+
+void eat_whitespace_back(char* x);
+
 #endif

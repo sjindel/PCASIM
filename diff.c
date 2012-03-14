@@ -45,13 +45,13 @@ int* diff_tally(simulation* x, simulation* y)
 
     for (int l = 0; l < h; l++)
     {
-	int xs;
+	int xs = 0;
 	for (int i = 0; i < w; i++)
 	    xs += x->trace[l*w + i];
-	int ys;
+	int ys = 0;
 	for (int i = 0; i < w; i++)
 	    ys += y->trace[l*w + i];
-	diff[l] = xs-ys.
+	diff[l] = xs-ys;
     }
 
     return diff;

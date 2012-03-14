@@ -1,19 +1,5 @@
 #include "pcasim.h"
 
-char* eat_whitespace_front(char* x)
-{
-    while ((*x == ' ') || (*x == '\t') || (*x == '\n')) x++;
-    return x;
-}
-
-void eat_whitespace_back(char* x)
-{
-    // Remove trailing whitespace.
-    char* end = x + strlen(x);
-    end--;
-    while ((*end == ' ') || (*end == '\t') || (*end == '\n')) end--;
-    *(end+1) = '\0';
-}
 
 // Parse and interpret the line.
 
@@ -151,10 +137,10 @@ int interpret(char* line, sim_context* context, sim_table* table)
 
 
 	    // Everything is OK so far, time to begin loop.
-
 	    for(double p = p_start_value; p < p_end_value; p+=p_interval)
 	    {
 		context->p = p;
+		context->seed++;
 		if(interpret(rest,context,table)) break;
 	    }
 
@@ -197,6 +183,7 @@ int interpret(char* line, sim_context* context, sim_table* table)
 	    for(char rule = rule_start_value; rule < rule_end_value; rule+=rule_interval)
 	    {
 		context->rule = rule;
+		context->seed++;
 		if(interpret(rest,context,table)) break;
 	    }
 
@@ -238,6 +225,7 @@ int interpret(char* line, sim_context* context, sim_table* table)
 	    for(int width = width_start_value; width < width_end_value; width+=width_interval)
 	    {
 		context->width = width;
+		context->seed++;
 		if(interpret(rest,context,table)) break;
 	    }
 
@@ -280,6 +268,7 @@ int interpret(char* line, sim_context* context, sim_table* table)
 	    for(int height = height_start_value; height < height_end_value; height+=height_interval)
 	    {
 		context->height = height;
+		context->seed++;
 		if(interpret(rest,context,table)) break;
 	    }
 
@@ -358,8 +347,12 @@ int interpret(char* line, sim_context* context, sim_table* table)
 	    return sim_write(table);
 	else if (strcmp(command,"disp") == 0)
 	    return sim_disp(context,table,args);
+	else if (strcmp(command,"diff") == 0)
+	    return sim_diff_hamm(context,table,args);
 	else if (strcmp(command,"print") == 0)
 	    return sim_print(context,table);
+	else if (strcmp(command,"render") == 0)
+	    return sim_render(table);
 	else if (strcmp(command,"show") == 0)
 	    return sim_show(context);
 	else if (strcmp(command,"stat") == 0)
@@ -394,7 +387,7 @@ int main(int argc, char** argv)
     context->rule = 110;
     context->width = 100;
     context->height = 100;
-    context->initial = calloc(100,sizeof(char));
+    context->initial = xcalloc(100,sizeof(char));
     context->initial[99] = 1;
     context->seed = time(0);
 
