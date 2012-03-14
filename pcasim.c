@@ -371,6 +371,8 @@ int interpret(char* line, sim_context* context, sim_table* table)
 	    return sim_run(context,table);
 	else if (strcmp(command,"write") == 0)
 	    return sim_write(table);
+	else if (strcmp(command,"display") == 0)
+	    return sim_disp(context,table);
 	else if (strcmp(command,"show") == 0)
 	    return sim_show(context);
 	else if (strcmp(command,"stat") == 0)

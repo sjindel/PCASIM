@@ -1,5 +1,6 @@
 #include "commands.h"
 #define FILE_NAME_BUF_SIZE 128
+#define BYTES_PER_PIXEL 8
 
 // Set a context variable.
 
@@ -97,6 +98,89 @@ int sim_run (sim_context* context, sim_table* table)
     return 0;
 }
 
+int sim_disp(sim_context* context, sim_table* table)
+{
+    /*
+      Write an image corresponding to the simulation trace
+      in an appropriate output file and send it to eog.
+    */
+
+    sim_desc d = {context->p, context->rule, context->width, context->height,
+		  context->initial};
+
+    simulation* s = table_find(&d,1,context->seed,table);
+
+    if (s == NULL)
+    {
+	printf("Context simulation has not been run.\n");
+	return 1;
+    }
+
+    char buffer[FILE_NAME_BUF_SIZE];
+
+    sprintf(buffer,"/tmp/%lf.%d.%d.%d.%d.trace.csv",
+	    d.p, d.rule, d.width, d.height, s->mt_seed);
+
+    FILE* f = fopen(buffer,"w");
+
+    if (!f)
+    {
+	printf("Could not open output file.\n");
+	return 1;
+    }
+
+    write_simulation_csv(s,f);
+
+    fclose(f);
+
+    int x = fork();
+    if (x == 0)
+	execl("display_trace",buffer);
+
+    return 0;
+}
+
+// Write simulations in the hash table to disk
+// (in the current working directory).
+
+int sim_write(sim_table* table)
+{
+    for (int i = 0; i < table->h; i++)
+    {
+	sim_node* c = table->array[i];
+
+	while(c != NULL)
+	{
+	    // Write the simulation in this node to a file.
+
+	    sim_desc d = c->s->desc;
+
+	    char buffer[FILE_NAME_BUF_SIZE];
+
+	    sprintf(buffer,"%lf.%d.%d.%d.%d.trace.csv",
+		    d.p, d.rule, d.width, d.height, c->s->mt_seed);
+
+	    FILE* f = fopen(buffer,"w");
+
+	    if (f == NULL)
+	    {
+		printf("Error: could not open output file.\n");
+		return 1;
+	    }
+
+	    write_simulation_csv(c->s,f);
+
+	    fclose(f);
+
+	    c = c->next;
+
+	}
+
+    }
+
+    return 0;
+}
+
 // Print out the current environment variables.
 
 int sim_show (sim_context* context)
@@ -127,47 +211,6 @@ int sim_stat (sim_table* table)
     printf("Table stats:\n");
     printf("Elements: %d\n",table->n);
     printf("Size: %d\n",table->h);
-
-    return 0;
-}
-
-// Write simulations in the hash table to disk
-// (in the current working directory).
-
-int sim_write(sim_table* table)
-{
-    for (int i = 0; i < table->h; i++)
-    {
-	sim_node* c = table->array[i];
-
-	while(c != NULL)
-	{
-	    // Write the simulation in this node to a file.
-
-	    sim_desc d = c->s->desc;
-
-	    char buffer[FILE_NAME_BUF_SIZE];
-
-	    sprintf(buffer,"%lf.%d.%d.%d.%d",
-		    d.p, d.rule, d.width, d.height, c->s->mt_seed);
-
-	    FILE* f = fopen(buffer,"w");
-
-	    if (f == NULL)
-	    {
-		printf("Error: could not open output file.\n");
-		return 1;
-	    }
-
-	    write_simulation_csv(c->s,f);
-
-	    fclose(f);
-
-	    c = c->next;
-
-	}
-
-    }
 
     return 0;
 }

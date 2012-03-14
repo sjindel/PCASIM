@@ -35,6 +35,8 @@ int main(int argc, char** argv)
 
     print_simulation(s);
 
+    sim_disp(context,t);
+
     free(init);
 
     free(context);
