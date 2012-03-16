@@ -203,7 +203,7 @@ int sim_disp(sim_context* context, sim_table* table, char* args)
 
     char buf[TOTAL_BUF_SIZE];
 
-    sprintf(buf,"eog %s",buffer);
+    sprintf(buf,"eog %s &",buffer);
 
     system(buf);
 
