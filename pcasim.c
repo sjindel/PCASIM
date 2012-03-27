@@ -347,8 +347,10 @@ int interpret(char* line, sim_context* context, sim_table* table)
 	    return sim_write(table);
 	else if (strcmp(command,"disp") == 0)
 	    return sim_disp(context,table,args);
-	else if (strcmp(command,"diff") == 0)
+	else if (strcmp(command,"hdiff") == 0)
 	    return sim_diff_hamm(context,table,args);
+	else if (strcmp(command,"tdiff") == 0)
+	    return sim_diff_tally(context,table,args);
 	else if (strcmp(command,"print") == 0)
 	    return sim_print(context,table);
 	else if (strcmp(command,"render") == 0)
@@ -361,6 +363,8 @@ int interpret(char* line, sim_context* context, sim_table* table)
 	    return -1;
 	else if (strcmp(command,"exit") == 0)
 	    return -1;
+	else if (*command == '\0')
+	    return 0;
 	else
 	{
 	    printf("Invalid command.\n");
