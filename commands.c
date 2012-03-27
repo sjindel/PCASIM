@@ -145,6 +145,7 @@ int sim_set (sim_context* context, sim_table* table, char* args)
 
 int sim_run (sim_context* context, sim_table* table)
 {
+    context->seed++;
 
     sim_desc d = {context->p, context->rule, context->width, context->height,
 		  context->initial};
@@ -153,7 +154,6 @@ int sim_run (sim_context* context, sim_table* table)
 
     table_add(sim,table);
 
-    context->seed++;
 
     return 0;
 }
