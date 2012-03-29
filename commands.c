@@ -182,7 +182,7 @@ int sim_disp(sim_context* context, sim_table* table, char* args)
 
     char buffer[FILE_NAME_BUF_SIZE];
 
-    sprintf(buffer,"%lf.%d.%d.%d.%d.trace.pgm",
+    sprintf(buffer,"%lf.%u.%d.%d.%d.trace.pgm",
 	    d.p, d.rule, d.width, d.height, s->mt_seed);
 
     int* image = xcalloc(d.width*scale*d.height*scale,sizeof(int));
@@ -248,7 +248,7 @@ int sim_write(sim_table* table)
 
 	    char buffer[FILE_NAME_BUF_SIZE];
 
-	    sprintf(buffer,"%lf.%d.%d.%d.%d.trace.csv",
+	    sprintf(buffer,"%lf.%u.%d.%d.%d.trace.csv",
 		    d.p, d.rule, d.width, d.height, c->s->mt_seed);
 
 	    FILE* f = fopen(buffer,"w");
@@ -291,7 +291,7 @@ int sim_render(sim_table* table)
 
 	    char buffer[FILE_NAME_BUF_SIZE];
 
-	    sprintf(buffer,"%lf.%d.%d.%d.%d.trace.pgm",
+	    sprintf(buffer,"%lf.%hhu.%d.%d.%d.trace.pgm",
 		    d.p, d.rule, d.width, d.height, c->s->mt_seed);
 
 	    int* image = xcalloc(d.width*scale*d.height*scale,sizeof(int));
@@ -487,8 +487,8 @@ int sim_diff_tally(sim_context* context, sim_table* table, char* args)
 
 int sim_show (sim_context* context)
 {
-    printf("p: %lf\nwidth: %d\nheight: %d\nseed: %d\ninitial:\n",
-	   context->p,context->width,context->height,context->seed);
+    printf("rule: %u\np: %lf\nwidth: %d\nheight: %d\nseed: %d\ninitial:\n",
+	context->rule, context->p,context->width,context->height,context->seed);
     for (int i = 0; i < context->width; i++)
 	printf("%d",context->initial[i]);
     printf("\n");
