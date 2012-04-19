@@ -182,15 +182,22 @@ int sim_disp(sim_context* context, sim_table* table, char* args)
 
     char buffer[FILE_NAME_BUF_SIZE];
 
-    sprintf(buffer,"%lf.%u.%d.%d.%d.trace.pgm",
+    sprintf(buffer,"%lf.%u.%d.%d.%d.trace.ppm",
 	    d.p, d.rule, d.width, d.height, s->mt_seed);
 
     int* image = xcalloc(d.width*scale*d.height*scale,sizeof(int));
 
     for (int i = 0; i < d.height*scale; i++)
-	for (int j = 0; j < d.width*scale; j++)
-	    image[i*d.width*scale + j] =
-		(1 - s->trace[(i/scale)*d.width + (j/scale)]) * 255;
+	for (int j = 0; j < d.width*scale; j++) {
+	    if (s->trace[(i/scale)*d.width + (j/scale)] == 0)
+		image[i*d.width*scale + j] = 0x00ffffff;
+	    if (s->trace[(i/scale)*d.width + (j/scale)] == 1)
+		image[i*d.width*scale + j] = 0x0;
+	    if (s->trace[(i/scale)*d.width + (j/scale)] == 2)
+		image[i*d.width*scale + j] = 0x008080ff;
+	    if (s->trace[(i/scale)*d.width + (j/scale)] == 3)
+		image[i*d.width*scale + j] = 0x000000b0;
+	}
 
 //		    printf("%d",image[(i*scale + k)*d.width + j*scale + l]/255);
 
@@ -291,17 +298,31 @@ int sim_render(sim_table* table)
 
 	    char buffer[FILE_NAME_BUF_SIZE];
 
-	    sprintf(buffer,"%lf.%hhu.%d.%d.%d.trace.pgm",
+	    sprintf(buffer,"%lf.%hhu.%d.%d.%d.trace.ppm",
 		    d.p, d.rule, d.width, d.height, c->s->mt_seed);
 
 	    int* image = xcalloc(d.width*scale*d.height*scale,sizeof(int));
 
+    for (int i = 0; i < d.height*scale; i++)
+	for (int j = 0; j < d.width*scale; j++) {
+	    if (c->s->trace[(i/scale)*d.width + (j/scale)] == 0)
+		image[i*d.width*scale + j] = 0x00ffffff;
+	    if (c->s->trace[(i/scale)*d.width + (j/scale)] == 1)
+		image[i*d.width*scale + j] = 0x0;
+	    if (c->s->trace[(i/scale)*d.width + (j/scale)] == 2)
+		image[i*d.width*scale + j] = 0x008080ff;
+	    if (c->s->trace[(i/scale)*d.width + (j/scale)] == 3)
+		image[i*d.width*scale + j] = 0x000000b0;
+	}
+
+    /*
 	    for (int i = 0; i < d.height*scale; i++)
 		for (int j = 0; j < d.width*scale; j++)
 		    image[i*d.width*scale + j] =
 			(1 - c->s->trace[(i/scale)*d.width + (j/scale)]) * 255;
 
 	//		    printf("%d",image[(i*scale + k)*d.width + j*scale + l]/255);
+	*/
 
 
 	    pgm p = {d.width*scale,d.height*scale,255,image};

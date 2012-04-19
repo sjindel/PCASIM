@@ -1,6 +1,12 @@
 #include "sim.h"
 #include "utils.h"
 
+char norm(char x)
+{
+    if (x > 1) return x - 2;
+    return x;
+}
+
 simulation* run (sim_desc* x, int seed)
 {
     // Some useful variables
@@ -53,24 +59,22 @@ simulation* run (sim_desc* x, int seed)
         {
             char new_state;
             double z = dsfmt_genrand_open_open(&dsfmt);
-            if (z < (x->p))
-            {
-                int q;
-                if (j - 1 < 0)
-                    q = j+w-1;
-                else
-                    q = j-1;
+	    int q;
+	    if (j - 1 < 0)
+		q = j+w-1;
+	    else
+		q = j-1;
 
-                char configuration =
-                    (trace[(i-1)*w + q]  << 2)
-                    + (trace[(i-1)*w*sizeof(char) + j]  << 1)
-                    + (trace[(i-1)*w*sizeof(char) + ((j+1) % w)]  << 0);
+	    char configuration =
+		(norm(trace[(i-1)*w + q]) << 2)
+	    + (norm(trace[(i-1)*w*sizeof(char) + j]) << 1)
+		+ (norm(trace[(i-1)*w*sizeof(char) + ((j+1) % w)])  << 0);
 
-                new_state = (x->rule >> configuration) & 1;
-            }
-            else
+	    new_state = (x->rule >> configuration) & 1;
+            if (z >= (x->p))
 	    {
-		new_state = trace[(i-1)*w + j];
+		new_state = norm(trace[(i-1)*w + j]) +
+		    2*abs(new_state - norm(trace[(i-1)*w + j]));
 	    }
 
             tmp[j] = new_state;

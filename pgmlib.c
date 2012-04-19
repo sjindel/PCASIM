@@ -101,15 +101,19 @@ void WritePGM( char* filename, pgm* pPgm ) {
 //    printf ("Writing ouput PGM: %s\n\n", filename);
 
     //write the header
-    fprintf( ofp, "P2\n" );
+    fprintf( ofp, "P3\n" );
     fprintf( ofp, "%d %d\n", pPgm->w, pPgm->h );
     fprintf( ofp, "%d\n", pPgm->max );
 
     //write the image data
     for (i = 0; i < pPgm->h;i++) {
         for (j = 0; j < pPgm->w; j++)
-            fprintf(ofp,"%d ",*(pPgm->pData + i * pPgm->w + j));
-        fprintf(ofp,"\n");
+	{
+            fprintf(ofp,"%d ",*(pPgm->pData + i * pPgm->w + j) & 255);
+            fprintf(ofp,"%d ",(*(pPgm->pData + i * pPgm->w + j) >> 8) & 255);
+            fprintf(ofp,"%d ",(*(pPgm->pData + i * pPgm->w + j) >> 16) & 255);
+	    fprintf(ofp,"\n");
+	}
     }
     fclose(ofp);
 }
