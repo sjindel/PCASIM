@@ -1,29 +1,37 @@
-import Math.Polynomial
 import Data.List
 
 type Cell = Int
 type Prob = Double
+type Rule = Int
 
 data Inst = Inst {
       instProb :: Prob
       , instStep :: Integer
       , instConfig :: [Cell]
-    } deriving (Show, Eq)
+    } deriving (Eq)
+
+instance Show Inst where
+    show (Inst p s c) = "(" ++ (show p) ++ " : " ++ (show s) ++ ") " ++ (show c)
 
 type Schedule = [Bool]
 
-decToBin x = reverse $ decToBin' x
-    where
-      decToBin' 0 = []
-      decToBin' y = let (a,b) = quotRem y 2 in [b] ++ decToBin' a
+decToBin 0 = []
+decToBin y = let (a,b) = quotRem y 2 in [b] ++ decToBin a
 
-dive :: Integral n => n -> (a -> [a]) -> [a] -> [a]
-dive 0 _ i = i
-dive n f i = dive (n-1) f $ concat $ map f i
+binToDec' n [] = 0
+binToDec' n (x:xs) = x*(2^n) + (binToDec' (n+1) xs)
 
-trace :: Integral n => n -> (a -> [a]) -> [a] -> [[a]]
-trace 0 _ i = [i]
-trace n f i = i:(trace (n-1) f $ concat $ map f i)
+binToDec = binToDec' 0
+
+dive :: Integral n => n -> (a -> [a]) -> ([a] -> [a]) -> [a] -> [a]
+dive 0 _ _ i = i
+dive n g f i = dive (n-1) g f $ f $ concat $ map g i
+
+trace :: Integral n => n -> (a -> [a]) -> ([a] -> [a]) -> [a] -> [[a]]
+trace 0 _ _ i = [i]
+trace n g f i = i:(trace (n-1) g f $ f $ concat $ map g i)
+
+toList (a,b,c) = [a,b,c]
 
 evaluateRule :: (Cell,Cell,Cell) -> Cell
 evaluateRule neighbors = case neighbors of
@@ -83,4 +91,11 @@ continue bg p inst = combine $ map ((trimInst bg).(update bg p inst)) (generateS
     where len2 = (length $ instConfig inst) + 2
           trimInst c i = Inst (instProb i) (instStep i) (trim c $ instConfig i)
 
-main = return ()
+toPair :: Inst -> String
+toPair (Inst p s c) = (show s) ++ "," ++ (show p)
+
+--main = putStrLn $ concat $ intersperse "\n" $ map toPair $
+--       concat $ trace 9 (continue 0 0.95) combine [(Inst 1 0 [1])]
+
+main = putStrLn $ concat $ intersperse "\n" $ map show $
+       concat $ trace 9 (continue 0 0.95) combine [(Inst 1 0 [1])]
