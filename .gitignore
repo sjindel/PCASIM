@@ -1,2 +1,5 @@
 pcasim
 test
+hs/Core
+hs/Core.hi
+hs/Core.o
