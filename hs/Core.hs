@@ -33,6 +33,10 @@ traceSeq :: Integral n => n -> (a -> S.Seq a) -> (S.Seq a -> S.Seq a) -> S.Seq a
 traceSeq 0 _ _ i = S.singleton i
 traceSeq n g f i = i S.<| (traceSeq (n-1) g f $ f $ F.foldr (S.><) S.empty $ fmap g i)
 
+trace :: Integral n => n -> (a -> [a]) -> ([a] -> [a]) -> [a] -> [[a]]
+trace 0 _ _ i = [i]
+trace n g f i = i:(trace (n-1) g f $ f $ concat $ map g i)
+
 toList (a,b,c) = [a,b,c]
 
 evaluateRule :: (Cell,Cell,Cell) -> Cell
@@ -118,9 +122,9 @@ toPair (Inst p s c) = (show s) ++ "," ++ (show p)
 --main = putStrLn $ concat $ intersperse "\n" $ map toPair $
 --       concat $ trace 9 (continue 0 0.95) combine [(Inst 1 0 [1])]
 
---main = putStrLn $ concat $ intersperse "\n" $ map show $
---       concat $ trace 9 (continue 0 0.95) combine [(Inst 1 0 [1])]
+main = putStrLn $ concat $ intersperse "\n" $ map show $
+       concat $ trace 9 (continue 0 0.95) combine [(Inst 1 0 [1])]
 
-main = putStrLn $ concat $ intersperse "\n" $ map show $ F.toList
-       $ F.foldr (S.><) S.empty $ traceSeq 9 (continueSeq 0 0.95) combineSeq
-       $ S.singleton (Inst 1 0 [1])
+--main = putStrLn $ concat $ intersperse "\n" $ map show $ F.toList
+--       $ F.foldr (S.><) S.empty $ traceSeq 9 (continueSeq 0 0.95) combineSeq
+--       $ S.singleton (Inst 1 0 [1])
