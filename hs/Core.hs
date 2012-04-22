@@ -29,8 +29,8 @@ diveSeq :: Integral n => n -> (a -> S.Seq a) -> (S.Seq a -> S.Seq a) -> S.Seq a 
 diveSeq 0 _ _ i = i
 diveSeq n g f i = diveSeq (n-1) g f $ f $ F.foldr (S.><) S.empty $ fmap g i
 
-traceSeq :: Integral n => n -> (a -> [a]) -> ([a] -> [a]) -> [a] -> [[a]]
-traceSeq 0 _ _ i = singleton i
+traceSeq :: Integral n => n -> (a -> S.Seq a) -> (S.Seq a -> S.Seq a) -> S.Seq a -> S.Seq (S.Seq a)
+traceSeq 0 _ _ i = S.singleton i
 traceSeq n g f i = i S.<| (traceSeq (n-1) g f $ f $ F.foldr (S.><) S.empty $ fmap g i)
 
 toList (a,b,c) = [a,b,c]
@@ -121,5 +121,6 @@ toPair (Inst p s c) = (show s) ++ "," ++ (show p)
 --main = putStrLn $ concat $ intersperse "\n" $ map show $
 --       concat $ trace 9 (continue 0 0.95) combine [(Inst 1 0 [1])]
 
-main = putStrLn $ concat $ intersperse "\n" $ map show $
-       concat $ F.toList $ trace 9 (continue 0 0.95) combine [(Inst 1 0 [1])]
+main = putStrLn $ concat $ intersperse "\n" $ map show $ F.toList
+       $ F.foldr (S.><) S.empty $ traceSeq 9 (continueSeq 0 0.95) combineSeq
+       $ S.singleton (Inst 1 0 [1])
