@@ -25,17 +25,13 @@ binToDec' n (x:xs) = x*(2^n) + (binToDec' (n+1) xs)
 
 binToDec = binToDec' 0
 
-dive :: Integral n => n -> (a -> [a]) -> ([a] -> [a]) -> [a] -> [a]
-dive 0 _ _ i = i
-dive n g f i = dive (n-1) g f $ f $ concat $ map g i
-
 diveSeq :: Integral n => n -> (a -> S.Seq a) -> (S.Seq a -> S.Seq a) -> S.Seq a -> S.Seq a
 diveSeq 0 _ _ i = i
 diveSeq n g f i = diveSeq (n-1) g f $ f $ F.foldr (S.><) S.empty $ fmap g i
 
-trace :: Integral n => n -> (a -> [a]) -> ([a] -> [a]) -> [a] -> [[a]]
-trace 0 _ _ i = [i]
-trace n g f i = i:(trace (n-1) g f $ f $ concat $ map g i)
+traceSeq :: Integral n => n -> (a -> [a]) -> ([a] -> [a]) -> [a] -> [[a]]
+traceSeq 0 _ _ i = singleton i
+traceSeq n g f i = i S.<| (traceSeq (n-1) g f $ f $ F.foldr (S.><) S.empty $ fmap g i)
 
 toList (a,b,c) = [a,b,c]
 
