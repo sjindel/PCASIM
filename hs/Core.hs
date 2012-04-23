@@ -79,18 +79,25 @@ probability p (x:xs) = case x of
                          True -> p * (probability p xs)
                          False -> (1-p) * (probability p xs)
 
-meld :: Inst -> [Inst] -> Inst
-meld i is = Inst probSum (instStep i) (instConfig i)
-    where probSum = (instProb i) + (sum $ map instProb is)
+unite :: Inst -> Inst -> Inst
+unite x y = Inst probSum (instStep x) (instConfig x)
+    where probSum = (instProb x) + (instProb y)
 
 meldSeq :: Inst -> S.Seq Inst -> Inst
 meldSeq i is = Inst probSum (instStep i) (instConfig i)
     where probSum = (instProb i) + (F.sum $ fmap instProb is)
 
-combine :: [Inst] -> [Inst]
-combine [] = []
-combine (i:is) = (meld i same):(combine rest)
-    where (same,rest) = partition (\x -> (instConfig x) == (instConfig i)) is
+insertUnique :: Inst -> [Inst] -> [Inst]
+insertUnique x (i:is) = if ((instConfig x) == (instConfig i))
+                  then (unite x i):is
+                  else i:(insertUnique x is)
+insertUnique x [] = [x]
+
+combine' :: [Inst] -> [Inst] -> [Inst]
+combine' cache [] = cache
+combine' cache (i:is) = combine' (insertUnique i cache) is
+
+combine = combine' []
 
 combineSeq :: S.Seq Inst -> S.Seq Inst
 combineSeq is = case S.viewl is of
