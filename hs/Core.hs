@@ -106,10 +106,18 @@ trimFront c (x:xs) = if (x == c) then (trimFront c xs) else (x:xs)
 trimBack c l = reverse $ trimFront c $ reverse l
 trim c l = trimFront c $ trimBack c l
 
+progress :: Cell -> Prob -> [Cell] -> Inst -> [Inst]
+progress bg up (prev:curr:next:cs) (Inst ip step cells) =
+    let new = evaluateRule (prev,curr,next)
+    in if (new == curr) then progress bg up (curr:next:cs) (Inst ip step (new:cells))
+       else (progress bg up (curr:next:cs) (Inst (ip*up) step (new:cells))) ++
+            (progress bg up (curr:next:cs) (Inst (ip*(1-up)) step (curr:cells)))
+progress _ _ _ (Inst p s c) = [Inst p s $ reverse c]
+
 continue :: Cell -> Prob -> Inst -> [Inst]
-continue bg p inst = combine $ map ((trimInst bg).(update bg p inst)) (generateSchedules len2)
-    where len2 = (length $ instConfig inst) + 2
-          trimInst c i = Inst (instProb i) (instStep i) (trim c $ instConfig i)
+continue bg up (Inst ip step conf) = combine $ map (trimInst bg) $
+                                     progress bg up (bg:bg:conf ++ [bg,bg]) (Inst ip (step+1) [])
+    where trimInst c (Inst ip step conf) = Inst ip step (trim c conf)
 
 continueSeq :: Cell -> Prob -> Inst -> S.Seq Inst
 continueSeq bg p inst = combineSeq $ fmap ((trimInst bg).(update bg p inst)) (generateSchedulesSeq len2)
@@ -123,7 +131,7 @@ toPair (Inst p s c) = (show s) ++ "," ++ (show p)
 --       concat $ trace 9 (continue 0 0.95) combine [(Inst 1 0 [1])]
 
 main = putStrLn $ concat $ intersperse "\n" $ map show $
-       concat $ trace 9 (continue 0 0.95) combine [(Inst 1 0 [1])]
+       concat $ trace 10 (continue 0 0.95) combine [(Inst 1 0 [1])]
 
 --main = putStrLn $ concat $ intersperse "\n" $ map show $ F.toList
 --       $ F.foldr (S.><) S.empty $ traceSeq 9 (continueSeq 0 0.95) combineSeq
