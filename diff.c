@@ -7,51 +7,50 @@
 
 // Compute array of row-wise hamming distance.
 
-int* diff_hamming(simulation* x, simulation* y)
+int *diff_hamming(simulation * x, simulation * y)
 {
     if (x->desc.height != y->desc.height)
-	return NULL;
+        return NULL;
 
     if (x->desc.width != y->desc.width)
-	return NULL;
+        return NULL;
 
     int h = x->desc.height;
     int w = x->desc.width;
 
-    int* diff = xcalloc(h,sizeof(int));
+    int *diff = xcalloc(h, sizeof(int));
 
     for (int l = 0; l < h; l++)
-	for (int i = 0; i < w; i++)
-	    if (x->trace[l*w + i] != y->trace[l*w + i])
-		diff[l]++;
+        for (int i = 0; i < w; i++)
+            if (x->trace[l * w + i] != y->trace[l * w + i])
+                diff[l]++;
 
     return diff;
 }
 
 // Compute array of row-wise tally difference.
 
-int* diff_tally(simulation* x, simulation* y)
+int *diff_tally(simulation * x, simulation * y)
 {
     if (x->desc.height != y->desc.height)
-	return NULL;
+        return NULL;
 
     if (x->desc.width != y->desc.width)
-	return NULL;
+        return NULL;
 
     int h = x->desc.height;
     int w = x->desc.width;
 
-    int* diff = xcalloc(h,sizeof(int));
+    int *diff = xcalloc(h, sizeof(int));
 
-    for (int l = 0; l < h; l++)
-    {
-	int xs = 0;
-	for (int i = 0; i < w; i++)
-	    xs += x->trace[l*w + i];
-	int ys = 0;
-	for (int i = 0; i < w; i++)
-	    ys += y->trace[l*w + i];
-	diff[l] = xs-ys;
+    for (int l = 0; l < h; l++) {
+        int xs = 0;
+        for (int i = 0; i < w; i++)
+            xs += x->trace[l * w + i];
+        int ys = 0;
+        for (int i = 0; i < w; i++)
+            ys += y->trace[l * w + i];
+        diff[l] = xs - ys;
     }
 
     return diff;

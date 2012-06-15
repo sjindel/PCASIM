@@ -5,14 +5,14 @@
 #include "utils.h"
 #include "commands.h"
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
-    sim_table* t = new_table();
+    sim_table *t = new_table();
 
-    char* init = xcalloc(100,sizeof(char));
+    char *init = xcalloc(100, sizeof(char));
     init[99] = 1;
 
-    sim_context* context = malloc(sizeof(struct sim_context));
+    sim_context *context = malloc(sizeof(struct sim_context));
 
     context->p = 1.0;
     context->width = 100;
@@ -21,21 +21,20 @@ int main(int argc, char** argv)
     context->initial = init;
     context->seed = time(0);
 
-    sim_desc pca = {1.0, 110, 100, 100, init};
+    sim_desc pca = { 1.0, 110, 100, 100, init };
 
-    sim_run(context,t);
+    sim_run(context, t);
 
-    simulation* s = table_find(&pca,1,context->seed,t);
+    simulation *s = table_find(&pca, 1, context->seed, t);
 
-    if (s == NULL)
-    {
-	printf("Failure.\n");
-	abort();
+    if (s == NULL) {
+        printf("Failure.\n");
+        abort();
     }
 
     print_simulation(s);
 
-    sim_disp(context,t,"3");
+    sim_disp(context, t, "3");
 
     free(init);
 

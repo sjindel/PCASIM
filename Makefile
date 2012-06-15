@@ -20,4 +20,4 @@ test: xalloc.c sim.c diff.c utils.c internals.c commands.c test.c pgmlib.c
 	gcc ${CCFLAGS} ${DEBUGFLAGS} dsfmt/dSFMT.c xalloc.c sim.c utils.c internals.c commands.c pgmlib.c diff.c test.c -o test
 
 clean:
-	rm -f test pcasim
+	rm -f test pcasim *.hi *.o PECA PECAPOLY
